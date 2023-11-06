@@ -1,30 +1,28 @@
-import os
-import pyaudio
-import time
-import playground 
-from gtts import gTTS
-import openai
-import speech_recognition as sr
-import env
+import numpy as np 
+import pandas as pd 
+from pandas import Series, DataFrame 
+import matplotlib.pyplot as plt 
+import seaborn as sns 
+import string 
+from nltk.corpus import stopwords 
+import NPL.py
 
-name = input("name you terapist: ")
+#data is our input dataset containing user input lines and it has a column of emotional class. 
+#The code will not work in IDE as no dataset has been provided 
 
-api_key = env(api_key)
 
-lang = 'en'
+#function to remove punctuations and stopwords 
+def function_preprocess (mess): 
+	nopunc = [] 
+	for char in mess : 
+		if char not in string.punctuation: 
+			nopunc.append(char) 
+	nopunc=''.join(nopunc) 
+	clean = [] 
+	for word in nopunc.split(): 
+		word = word.lower() 
+		if word not in stopwords.words('english'): 
+			clean.append(word) 
+	return clean 
 
-openai.api_key = api_key
 
-while True:
-    def get_audio():
-        r = sr.Recognizer()
-        with sr.Microphone() as source:
-            audio = r.listen(source)
-            said = ""
-            
-            try:
-                said = r.recognize_google(audio)
-                print(said)
-                
-                if name in said:
-                    chat_completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": said}])
