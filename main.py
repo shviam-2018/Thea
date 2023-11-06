@@ -1,28 +1,38 @@
-import numpy as np 
-import pandas as pd 
-from pandas import Series, DataFrame 
-import matplotlib.pyplot as plt 
-import seaborn as sns 
-import string 
-from nltk.corpus import stopwords 
-import NPL.py
+import openai
+import os
 
-#data is our input dataset containing user input lines and it has a column of emotional class. 
-#The code will not work in IDE as no dataset has been provided 
+# Set your OpenAI API key
+api_key = os.getenv("GPT_key")
+openai.api_key = api_key
 
+# Initialize a conversation with a system message
+conversation = [
+    {"role": "system", "content": "You are a helpful assistant."},
+]
 
-#function to remove punctuations and stopwords 
-def function_preprocess (mess): 
-	nopunc = [] 
-	for char in mess : 
-		if char not in string.punctuation: 
-			nopunc.append(char) 
-	nopunc=''.join(nopunc) 
-	clean = [] 
-	for word in nopunc.split(): 
-		word = word.lower() 
-		if word not in stopwords.words('english'): 
-			clean.append(word) 
-	return clean 
+# Function to send a user message and get a response
+def send_user_message(user_message):
+    message = {"role": "user", "content": user_message}
+    conversation.append(message)
 
+    response = openai.Completion.create(
+        engine="text-davinci-002",
+        messages=conversation
+    )
 
+    assistant_response = response.choices[0].message.content
+    conversation.append({"role": "assistant", "content": assistant_response})
+
+    return assistant_response
+
+# Example conversation
+print("Initializing conversation...")
+print("System: You are a helpful assistant.")
+
+while True:
+    user_input = input("You: ")
+    if user_input.lower() == "exit":
+        break
+
+    response = send_user_message(user_input)
+    print("Assistant:", response)
