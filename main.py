@@ -7,6 +7,9 @@ engine = pyttsx3.init("sapi5")
 voices = engine.getProperty("voices")
 engine.setProperty("voice", voices[0].id)
 
+#list of words
+happy_list = ["happy", "great", "good", "better"] #todo: make more lists
+
 def speak(audio):
     engine.say(audio)
     engine.runAndWait()
@@ -103,8 +106,8 @@ if __name__ == "__main__":
     while True:
         user_statement = takecommand().lower()
 
-        if "happy" in user_statement:
-            happy_mood_responses()
+        if any(word in user_statement for word in happy_list):
+            happy_mood_responses()#todo: make more like this and replace the elif "sad with the code you user for happy"
 
         elif "sad" in user_statement:
             sad_mood_responses()
