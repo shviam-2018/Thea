@@ -1,3 +1,4 @@
+#TODO:add a code that ask for the users name if they dont have anything inside of name 
 import datetime
 import random
 import speech_recognition as sr
