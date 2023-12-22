@@ -1,8 +1,8 @@
-import pyttsx3
-import speech_recognition as sr
-import datetime
 import webbrowser
+import datetime
 import random
+import speech_recognition as sr
+import pyttsx3
 
 engine = pyttsx3.init("sapi5")
 voices = engine.getProperty("voices")
@@ -22,6 +22,24 @@ def wishme():
         speak("Good evening!")
 
     speak("I am Campa sir. Please tell me how can I assist you today.")
+
+def takecommand():
+# it takes microphone input and ruterns string output
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("listening...")
+        r.pause_threshold = 1
+        audio = r.listen(source)
+        
+    try: 
+        print("recognizing...")
+        query = r.recognize_google(audio, language="en-us")
+        print(f"userside {query}\n")
+        
+    except Exception as e:
+        print("say that agein please...")
+        return "None"
+    return query 
 
 def happy_mood_responses():
     responses = [
