@@ -1,4 +1,3 @@
-#TODO:add a code that ask for the users name if they dont have anything inside of name 
 import datetime
 import random
 import speech_recognition as sr
@@ -24,8 +23,13 @@ def wishme():
         print("Good evening!")
         speak("Good evening!")
 
-    print("I am Thea and i will be you therapist for today. so lets start with how are you felling today")
-    speak("I am Thea and i will be you therapist for today. so lets start with how are you felling today")
+speak("Before we start today please stat you name for easy commiucation")
+name = input("Before we start today please stat you name for easy commiucation: ")
+print(name)
+
+print(f"I am Thea, your therapist for today, {name}. Let's start. How are you feeling today?")
+speak(f"I am Thea, your therapist for today, {name}. Let's start. How are you feeling today?")
+
 
 def takecommand():
     # It takes microphone input and returns string output
