@@ -1,4 +1,3 @@
-import webbrowser
 import datetime
 import random
 import speech_recognition as sr
@@ -15,52 +14,60 @@ def speak(audio):
 def wishme():
     hour = int(datetime.datetime.now().hour)
     if 0 <= hour < 12:
+        print("Good morning!")
         speak("Good morning!")
     elif 12 <= hour < 18:
+        print("Good afternoon")
         speak("Good afternoon!")
     else:
+        print("Good evening!")
         speak("Good evening!")
 
-    speak("I am Campa sir. Please tell me how can I assist you today.")
+    print("I am Thea and i will be you therapist for today. so lets start with how are you felling today")
+    speak("I am Thea and i will be you therapist for today. so lets start with how are you felling today")
 
 def takecommand():
-# it takes microphone input and ruterns string output
+    # It takes microphone input and returns string output
     r = sr.Recognizer()
     with sr.Microphone() as source:
-        print("listening...")
+        print("Listening...")
         r.pause_threshold = 1
         audio = r.listen(source)
-        
-    try: 
-        print("recognizing...")
-        User_statment = r.recognize_google(audio, language="en-us")
-        print(f"userside {User_statment}\n")
-        
+
+    try:
+        print("Recognizing...")
+        user_statement = r.recognize_google(audio, language="en-us")
+        print(f"User side: {user_statement}\n")
+
     except Exception as e:
-        print("say that agein please...")
+        print("Say that again, please...")
         return "None"
-    return User_statment 
+    return user_statement
 
 def happy_mood_responses():
     responses = [
-        "Tell me more. It sound interesting",
+        "Tell me more. It sounds interesting.",
         "I am so happy for you!",
         "That's fantastic news!",
         "You're doing great!",
         "I knew you could do it!"
     ]
-    speak(random.choice(responses))
+    response = random.choice(responses)
+    print(f"Thea: {response}")
+    speak(response)
 
 def sad_mood_responses():
     responses = [
-        "it's ok i know how you may be felling right now",
+        "It's ok; I know how you may be feeling right now.",
         "I'm here for you.",
         "It's okay to feel this way.",
         "Let's work through it together.",
-        "Take your time, I'm listening."
+        "Take your time; I'm listening."
     ]
-    speak(random.choice(responses))
-    
+    response = random.choice(responses)
+    print(f"Thea: {response}")
+    speak(response)
+
 def angry_mood_responses():
     responses = [
         "I understand you're angry right now.",
@@ -69,7 +76,9 @@ def angry_mood_responses():
         "Let's find a way to channel that anger into something positive.",
         "Take a deep breath; we can work through this together."
     ]
-    speak(random.choice(responses))
+    response = random.choice(responses)
+    print(f"Thea: {response}")
+    speak(response)
 
 def depressed_mood_responses():
     responses = [
@@ -79,24 +88,28 @@ def depressed_mood_responses():
         "It's okay to ask for help; I'm here to support you.",
         "Remember, you're not alone in this."
     ]
-    speak(random.choice(responses))
+    response = random.choice(responses)
+    print(f"Thea: {response}")
+    speak(response)
 
-
-# Add more mood functions like angry_mood_responses(), depressed_mood_responses(), etc.
 
 if __name__ == "__main__":
     wishme()
     while True:
-        User_statment = takecommand().lower()
+        user_statement = takecommand().lower()
 
-        if "happy" in User_statment:
+        if "happy" in user_statement:
             happy_mood_responses()
-        elif "sad" in User_statment:
-            sad_mood_responses()
-        # Add more conditions for other moods
 
-        elif "youtube" in User_statment:
-            webbrowser.open("youtube.com")
+        elif "sad" in user_statement:
+            sad_mood_responses()
+
+        elif "angry" in user_statement:
+            angry_mood_responses()
+
+        elif "depressed" in user_statement:
+            depressed_mood_responses()
+
         else:
             print("I can't answer you. I'm sorry.")
             speak("I can't answer you. I'm sorry.")
