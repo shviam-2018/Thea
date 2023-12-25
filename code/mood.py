@@ -8,6 +8,7 @@ engine.setProperty("voice", voices[0].id)
 def speak(audio):
     engine.say(audio)
     engine.runAndWait()
+    
 #list of word that trigger the responses 
 happy_list = ["happy", "great", "good", "better", "joyful", "content", "fulfilled", "positive", "optimistic", "upbeat", "elated", "radiant", "grateful", "blissful", "satisfied", "cheerful", "exuberant", "vibrant", "ecstatic", "peaceful", "serene", "blessed", "delighted", "glorious", "heartened", "inspired", "triumphant", "zealous", "merry", "euphoric", "jovial", "gleeful", "festive", "lively", "spirited", "buoyant", "uplifting", "hopeful", "comforted", "empowered", "wonderful"]
 
@@ -110,6 +111,33 @@ def depressed_mood_responses():
         "We'll find coping strategies together to make things more manageable.",
         "Taking care of your mental health is a courageous choice. Let's do it together."
     ]
+    response = random.choice(responses)
+    print(f"Thea: {response}")
+    speak(response)
+    
+def general_response():
+    responses = [
+        "Okay, can you tell me more?",
+        "I'm here to listen. Please share more.",
+        "I'm interested in hearing more. Go ahead.",
+        "Feel free to elaborate. What else is on your mind?",
+        "You have my attention. Share more details, if you'd like.",
+        "I'm here to help. Tell me more about it.",
+        "I appreciate your openness. Is there anything specific you'd like to discuss?",
+        "Your thoughts are important. Let's explore them together.",
+        "Thank you for sharing. Is there a particular aspect you want to focus on?",
+        "I'm here to support you. What would you like to talk about?",
+        "In our conversation, your comfort is a priority. Feel free to express yourself.",
+        "Your feelings matter. How can I assist you today?",
+        "Sharing your thoughts is a positive step. What else would you like to share?",
+        "It's okay to take your time. When you're ready, I'm here to listen.",
+        "Your perspective is valuable. Can you provide more details?",
+        "I'm curious to learn more about your thoughts. Please share when you're ready.",
+        "Every conversation is a chance for understanding. What would you like to discuss?",
+        "Your emotions are valid. Let's navigate through them together.",
+        "Thank you for opening up. How can we make this conversation most helpful for you?",
+    ]
+
     response = random.choice(responses)
     print(f"Thea: {response}")
     speak(response)
