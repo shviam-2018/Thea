@@ -1,8 +1,7 @@
 import datetime
-import random
 import speech_recognition as sr
 import pyttsx3
-from mood import happy_list, sad_list, angry_list, depressed_list, happy_mood_responses, sad_mood_responses, angry_mood_responses, depressed_mood_responses
+from mood import happy_list, sad_list, angry_list, depressed_list, happy_mood_responses, sad_mood_responses, angry_mood_responses, depressed_mood_responses, general_response
 
 # Initialize the text-to-speech engine
 engine = pyttsx3.init("sapi5")
@@ -80,5 +79,4 @@ if __name__ == "__main__":
             depressed_mood_responses()
 
         else:
-            print("I can't answer you. I'm sorry.")
-            speak("I can't answer you. I'm sorry.")
+            general_response()
