@@ -1,7 +1,7 @@
 import datetime
 import speech_recognition as sr
 import pyttsx3
-from mood import happy_list, sad_list, angry_list, depressed_list, happy_mood_responses, sad_mood_responses, angry_mood_responses, depressed_mood_responses, general_response
+from mood import (happy_list, sad_list, angry_list, depressed_list, suicidal_list, happy_mood_responses, sad_mood_responses, angry_mood_responses, depressed_mood_responses, suicidal_mood_responses, general_responses)
 
 # Initialize the text-to-speech engine
 engine = pyttsx3.init("sapi5")
@@ -34,13 +34,29 @@ def speak_and_print(message):
     print(message)
     speak(message)
 
-# Ask for the user's name and start the therapy session
-speak_and_print("Before we start today, please state your name for easy communication")
-name = input("Your Name: ")
-print(name)
+# Ask for the user's name and start the therapy session and desclaimer that say this is Not a real therapist just a script 
+while True:
+    speak_and_print("Before we proceed, please note that Thea is an AI therapist designed to provide support and companionship. It is not a substitute for professional mental health care. If you are experiencing severe distress or have suicidal thoughts, please seek immediate help from a mental health professional or contact a helpline in your region.")
 
-print(f"I am Thea, your therapist for today, {name}. Let's start. How are you feeling today?")
-speak(f"I am Thea, your therapist for today, {name}. Let's start. How are you feeling today?")
+    speak_and_print("The Thea development team emphasizes that while Thea aims to be supportive, it is not a licensed therapist. The AI is continually learning and evolving, and your feedback is valuable for its improvement. The Thea team dose not stand reliebel for any harm coussed by the programm use on your own risk")
+
+    disclaimer = "If you understand that Thea is not a real therapist and you have read and understood the disclaimer, please type 'thea is not a real therapist and i have read and understood the disclaimer': "
+    
+    speak_and_print(disclaimer)
+    user_agree = input("type hear: ").lower()
+    
+    if user_agree == "thea is not a real therapist and i have read and understood the disclaimer":
+        break  # Break out of the loop if the user agrees
+    elif user_agree == "admin code 97392263":
+        break
+
+# Proceed with the therapy session
+speak_and_print("Now, please state your name for easy communication")
+name = input("Your Name: ")
+
+
+print(f"I am Thea, your therapist for today, {name} remember that you can end the session whenever you what by saying `ok, thank you for the session` to . Let's start. How are you feeling today?")
+speak(f"I am Thea, your therapist for today, {name} remember that you can end the session whenever you what by saying `ok, thank you for the session` to . Let's start. How are you feeling today")
 
 # Function to take microphone input and return string output
 def takecommand():    
@@ -78,5 +94,11 @@ if __name__ == "__main__":
         elif any(word in user_statement for word in depressed_list):
             depressed_mood_responses()
 
-        else:
-            general_response()
+        elif any(word in user_statement for word in suicidal_list):
+            suicidal_mood_responses()
+            
+        elif user_statement == "ok, thank you for the session":
+            speak_and_print("Ok, then see you next time")
+            
+        if all(word not in user_statement for word in happy_list + sad_list + angry_list + depressed_list + suicidal_list):
+            general_responses()

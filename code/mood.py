@@ -18,6 +18,7 @@ angry_list = ["angry", "irate", "enraged", "furious", "livid", "incensed", "outr
 
 depressed_list = ["depressed", "downhearted", "melancholic", "disheartened", "blue", "low", "despondent", "despairing", "dismal", "gloomy", "forlorn", "sorrowful", "mournful", "wretched", "hopeless", "discouraged", "downtrodden", "disconsolate", "downcast", "miserable", "heavy-hearted", "sad", "unhappy", "glum", "joyless", "lugubrious", "morose", "somber", "sullen", "woeful", "tearful", "weepy", "weeping", "sulky", "pessimistic", "defeated", "crestfallen", "brokenhearted", "dejected", "desolate", "heartbroken", "inconsolable", "morbid", "unconsolable"]
 
+suicidal_list = ["suicidal", "hopeless", "desperate", "worthless", "overwhelmed", "lost", "trapped", "unbearable", "broken", "alone", "helpless", "painful", "endless", "darkness", "ending it", "ending my life", "cannot go on", "no way out", "giving up", "life is meaningless", "thinking of suicide", "suicide thoughts", "ending it all", "just want it to stop", "can't go on", "want to die", "don't want to live", "no reason to live", "wish I were dead", "I'm a burden", "tired of life", "nothing to live for", "fade away", "wish it would end", "permanent solution", "escape the pain", "end the suffering", "last resort"]
 
 # def for mood specificy responses 
 def happy_mood_responses():
@@ -115,7 +116,25 @@ def depressed_mood_responses():
     print(f"Thea: {response}")
     speak(response)
     
-def general_response():
+def suicidal_mood_responses():
+        responses = [
+        "I'm really sorry to hear that you're feeling this way. It's important to talk to someone who can provide support.",
+        "It's okay to ask for help. Consider reaching out to a friend, family member, or mental health professional.",
+        "You're not alone. Many people care about you, and there are resources available to support you.",
+        "Please don't hesitate to talk to someone you trust about your feelings. They may be able to offer assistance and comfort.",
+        "I'm here for you, but it's crucial to connect with those who can provide immediate help. Consider contacting a helpline or a mental health professional.",
+        "Remember, your feelings are valid, and seeking help is a sign of strength.",
+        "Even in the darkest moments, there is hope. Reach out to someone you trust and let them support you.",
+        "Taking the first step to talk about your feelings is a brave and important decision. You're not alone on this journey.",
+        "Your well-being matters, and there are people who want to help. Consider speaking to a mental health professional for guidance.",
+        "It's important to prioritize your safety. Connect with someone you trust or a mental health professional as soon as possible.",
+        "If you're struggling, please don't face it alone. Reach out to someone who cares about you or contact a mental health helpline.",
+        ]
+        responses = random.choice(responses)
+        print(f"Thea: {responses}")
+        speak(responses) 
+    
+def general_responses():
     responses = [
         "Okay, can you tell me more?",
         "I'm here to listen. Please share more.",
