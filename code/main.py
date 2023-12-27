@@ -6,7 +6,7 @@ from mood import (happy_list, sad_list, angry_list, depressed_list, suicidal_lis
 # Initialize the text-to-speech engine
 engine = pyttsx3.init("sapi5")
 voices = engine.getProperty("voices")
-engine.setProperty("voice", voices[0].id)
+engine.setProperty("voice", voices[1].id)
 
 # Function to speak the given audio
 def speak(audio):
@@ -38,9 +38,10 @@ def speak_and_print(message):
 while True:
     speak_and_print("Before we proceed, please note that Thea is an AI therapist designed to provide support and companionship. It is not a substitute for professional mental health care. If you are experiencing severe distress or have suicidal thoughts, please seek immediate help from a mental health professional or contact a helpline in your region.")
 
-    speak_and_print("The Thea development team emphasizes that while Thea aims to be supportive, it is not a licensed therapist. The AI is continually learning and evolving, and your feedback is valuable for its improvement. The Thea team dose not stand reliebel for any harm coussed by the programm use on your own risk")
+    speak_and_print("The Thea development team emphasizes that while Thea aims to be supportive, it is not a licensed therapist. The AI is continually learning and evolving, and your feedback is valuable for its improvement. The Thea team does not take responsibility for any harm caused by the program; use it at your own risk.")
 
     disclaimer = "If you understand that Thea is not a real therapist and you have read and understood the disclaimer, please type 'thea is not a real therapist and i have read and understood the disclaimer': "
+
     
     speak_and_print(disclaimer)
     user_agree = input("type hear: ").lower()
