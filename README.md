@@ -3,9 +3,9 @@
 Welcome to Thea, your virtual companion on the path to emotional well-being! Thea is an artificial intelligence therapist implemented in Python, designed to simulate the empathetic and understanding qualities of a real-life therapist. With a focus on continuous learning and personalized interactions, Thea aims to create a supportive environment for users seeking emotional guidance.
 
 # Disclaimer
-Before proceeding, it is crucial to note that Thea is an AI therapist designed to provide support and companionship. However, it is not a substitute for professional mental health care. If you are experiencing severe distress or have suicidal thoughts, please seek immediate help from a mental health professional or contact a helpline in your region.
+Before proceeding, it is crucial to note that Thea is an AI therapist designed to provide support and companionship. However, **it is not a substitute for professional mental health care. If you are experiencing severe distress or have suicidal thoughts, please seek immediate help from a mental health professional or contact a helpline in your region.**
 
-The Thea development team emphasizes that while Thea aims to be supportive, it is not a licensed therapist. The AI is continually learning and evolving, and your feedback is valuable for its improvement. The Thea team does not take responsibility for any harm caused by the program; use it at your own risk.
+The **Thea development team emphasizes** that while Thea aims to be supportive, **it is not a licensed therapist.** The AI is continually learning and evolving, and your feedback is valuable for its improvement. **The Thea team does not take responsibility for any harm caused by the program; use it at your own risk.**
 
 ## Features
 
