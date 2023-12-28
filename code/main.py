@@ -48,7 +48,7 @@ while True:
     
     if user_agree == "thea is not a real therapist and i have read and understood the disclaimer":
         break  # Break out of the loop if the user agrees
-    elif user_agree == "admin code 97392263":
+    elif user_agree == "admin code 110308":
         break
 
 # Proceed with the therapy session
