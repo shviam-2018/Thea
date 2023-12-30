@@ -7,7 +7,7 @@ if ! command -v python3 > /dev/null || ! command -v pip3 > /dev/null; then
 fi
 
 # Install specific Python packages
-pip3 install speech_recognition pyttsx3
+pip3 install speechrecognition pyttsx3
 
 # Assuming mood is your custom module and is not available on PyPI
 # If mood is available on PyPI, you can install it using pip3 as well
