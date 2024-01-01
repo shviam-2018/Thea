@@ -4,7 +4,7 @@ import pyttsx3
 from mood import (happy_list, sad_list, angry_list, depressed_list, suicidal_list, happy_mood_responses, sad_mood_responses, angry_mood_responses, depressed_mood_responses, suicidal_mood_responses, general_responses)
 
 # Initialize the text-to-speech engine
-engine = pyttsx3.init("sapi5")
+engine = pyttsx3.init()
 voices = engine.getProperty("voices")
 engine.setProperty("voice", voices[1].id)
 
