@@ -2,6 +2,10 @@
 
 Welcome to Thea, your virtual companion on the path to emotional well-being! Thea is an artificial intelligence therapist implemented in Python, designed to simulate the empathetic and understanding qualities of a real-life therapist. With a focus on continuous learning and personalized interactions, Thea aims to create a supportive environment for users seeking emotional guidance.
 
+# compatability
+Windows only due to an overlook while making the project using **pyttsx3** which relies on **pywin32** which is only available on Windows as the name suggests. 
+The Thea development team is working hard to improve. And to use a more os friendly package, this update can be expected 3 updates from 0.1.0
+
 # Disclaimer
 Before proceeding, it is crucial to note that Thea is an AI therapist designed to provide support and companionship. However, **it is not a substitute for professional mental health care. If you are experiencing severe distress or have suicidal thoughts, please seek immediate help from a mental health professional or contact a helpline in your region.**
 
