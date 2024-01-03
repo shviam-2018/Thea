@@ -8,7 +8,7 @@ fi
 
 # Install specific Python packages (excluding pywin32 on non-Windows systems)
 if [[ $(uname) == "Linux" ]]; then
-    pip3 install speechrecognition==3.10.0 pyttsx3==2.90
+    echo "Sorry, the Thea development team has not yet reached Linux. But we are working as hard as we can to make it available to all operating systems."
 else
     pip3 install speechrecognition==3.10.0 pyttsx3==2.90 pywin32==306
 fi
