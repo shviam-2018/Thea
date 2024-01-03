@@ -6,12 +6,11 @@ if ! command -v python3 > /dev/null || ! command -v pip3 > /dev/null; then
     exit 1
 fi
 
-# Install specific Python packages
-pip3 install speechrecognition pyttsx3 pywin32
-
-# Assuming mood is your custom module and is not available on PyPI
-# If mood is available on PyPI, you can install it using pip3 as well
-# Example: pip3 install mood
+# Install specific Python packages (excluding pywin32 on non-Windows systems)
+if [[ $(uname) == "Linux" ]]; then
+    pip3 install speechrecognition==3.10.0 pyttsx3==2.90
+else
+    pip3 install speechrecognition==3.10.0 pyttsx3==2.90 pywin32==306
+fi
 
 echo "Installation completed successfully."
-
