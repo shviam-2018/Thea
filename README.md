@@ -35,11 +35,16 @@ To get started with Thea, follow these simple steps:
 
 3. **Install Dependencies:**
    ```bash
-   pip install -r requirements.txt
+   bash install.sh
+   ```
+   or
+   ```bash
+   pip3 install speechrecognition==3.10.0 pyttsx3==2.90 
    ```
 
 4. **Run Thea:**
    ```bash
+   cd code
    python main.py
    ```
 
