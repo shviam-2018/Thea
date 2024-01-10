@@ -98,8 +98,8 @@ if __name__ == "__main__":
         elif any(word in user_statement for word in suicidal_list):
             suicidal_mood_responses()
             
-        elif user_statement == "ok, thank you for the session":
-            speak_and_print("Ok, then see you next time")
+        elif user_statement == "ok thank you for the session":
+            speak_and_print("Ok then see you next time")
             
         if all(word not in user_statement for word in happy_list + sad_list + angry_list + depressed_list + suicidal_list):
             general_responses()
