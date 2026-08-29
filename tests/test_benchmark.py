@@ -42,7 +42,7 @@ class BenchmarkTests(unittest.TestCase):
             first_content_seconds=0.8,
         )
         report = BenchmarkReport(
-            model="qwen3:4b",
+            model="qwen3:4b-instruct",
             thinking_disabled=True,
             context_window=4096,
             response_limit=128,
@@ -55,7 +55,7 @@ class BenchmarkTests(unittest.TestCase):
             memory_before=MemoryUsage(4 * 1024**3, 16 * 1024**3),
             memory_loaded=MemoryUsage(7 * 1024**3, 16 * 1024**3),
             running_model=RunningModelInfo(
-                "qwen3:4b", 3 * 1024**3, 0, 4096, None
+                "qwen3:4b-instruct", 3 * 1024**3, 0, 4096, None
             ),
         )
         output = format_benchmark(report)

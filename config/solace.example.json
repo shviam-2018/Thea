@@ -1,5 +1,5 @@
 {
-  "chat_model": "qwen3:4b",
+  "chat_model": "qwen3:4b-instruct",
   "embedding_model": "nomic-embed-text:latest",
   "embedding_dimensions": 768,
   "ollama_base_url": "http://127.0.0.1:11434",

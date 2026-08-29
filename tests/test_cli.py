@@ -198,11 +198,11 @@ class CliTests(unittest.TestCase):
     def test_missing_model_exits_gracefully(self):
         output = []
         companion = FakeCompanion(
-            ready_error=OllamaModelUnavailableError("ollama pull qwen3:4b"),
+            ready_error=OllamaModelUnavailableError("ollama pull qwen3:4b-instruct"),
         )
         result = run_chat(SolaceConfig(), companion=companion, output_fn=output.append)
         self.assertEqual(result, 1)
-        self.assertIn("ollama pull qwen3:4b", output[-1])
+        self.assertIn("ollama pull qwen3:4b-instruct", output[-1])
 
 
 if __name__ == "__main__":

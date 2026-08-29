@@ -37,7 +37,7 @@ class StatusTests(unittest.TestCase):
             cpu="Test CPU",
             memory=MemoryUsage(8 * 1024**3, 16 * 1024**3),
             disk=DiskUsage(80 * 1024**3, 238 * 1024**3),
-            chat_model="qwen3:4b",
+            chat_model="qwen3:4b-instruct",
             embedding_model="nomic-embed-text:latest",
             embedding_dimensions="768 (verified)",
             ollama_state="running",
@@ -57,7 +57,7 @@ class StatusTests(unittest.TestCase):
         for expected in (
             "Solace 0.2.0-alpha.test",
             "CPU: Test CPU",
-            "Chat model: qwen3:4b",
+            "Chat model: qwen3:4b-instruct",
             "Embedding model: nomic-embed-text:latest",
             "Embedding dimensions: 768 (verified)",
             "Thinking: disabled",
@@ -105,7 +105,7 @@ class StatusTests(unittest.TestCase):
         get_json.return_value = {
             "models": [
                 {
-                    "name": "qwen3:4b",
+                    "name": "qwen3:4b-instruct",
                     "size": 3 * 1024**3,
                     "size_vram": 0,
                 }

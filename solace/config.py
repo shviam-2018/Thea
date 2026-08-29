@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Any, Mapping
 
 
-DEFAULT_CHAT_MODEL = "qwen3:4b"
+DEFAULT_CHAT_MODEL = "qwen3:4b-instruct"
 DEFAULT_EMBEDDING_MODEL = "nomic-embed-text:latest"
 DEFAULT_EMBEDDING_DIMENSIONS = 768
 

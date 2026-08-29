@@ -10,7 +10,7 @@ The current Solace v2 prerelease is `0.2.0-alpha.1`. Python package tooling expo
 
 The initial development target is a Ryzen 5 7530U laptop with 16 GB RAM and integrated Radeon graphics. The supported baseline is deliberately small:
 
-- Chat: `qwen3:4b`
+- Chat: `qwen3:4b-instruct`
 - Embeddings: `nomic-embed-text:latest` (768 dimensions)
 - One chat model and one embedding model installed during normal development
 - A bounded 24-message short-term context, with selective Mem0 retrieval planned for long-term memory
@@ -55,7 +55,7 @@ No Python runtime dependencies are needed for `/status`. It uses standard operat
 
 Interactive chat uses only the configured loopback Ollama server and configured model. It has no cloud or remote fallback and never downloads a model. Normal chat sends Ollama's native `think: false` control and streams visible `message.content` as it arrives; structured reasoning is neither displayed nor persisted. Solace does not use fragile text stripping.
 
-The exact installed artifact matters. On the development machine tested on 2026-08-29, Ollama's `qwen3:4b` tag resolves to `Qwen3-4B-Thinking-2507`, a thinking-only model whose metadata says `general.finetune: Thinking`. It cannot honor non-thinking chat even when the API request sends `think: false`; its template unconditionally starts a thinking block and Ollama places the generated reasoning in `message.content`. Solace detects that metadata and refuses normal chat rather than expose reasoning. It does not silently pull or select a replacement. Ollama lists `qwen3:4b-instruct` as a separate approximately 2.5 GB package, but downloading or changing to it requires an explicit developer decision.
+The exact installed artifact matters. On the development machine tested on 2026-08-29, Ollama's `qwen3:4b-instruct` tag resolves to `Qwen3-4B-Thinking-2507`, a thinking-only model whose metadata says `general.finetune: Thinking`. It cannot honor non-thinking chat even when the API request sends `think: false`; its template unconditionally starts a thinking block and Ollama places the generated reasoning in `message.content`. Solace detects that metadata and refuses normal chat rather than expose reasoning. It does not silently pull or select a replacement. Ollama lists `qwen3:4b-instruct-instruct` as a separate approximately 2.5 GB package, but downloading or changing to it requires an explicit developer decision.
 
 ## Chat commands
 

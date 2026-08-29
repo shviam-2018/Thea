@@ -16,7 +16,7 @@ from solace.ollama import (
 def make_adapter(**overrides):
     values = {
         "base_url": "http://127.0.0.1:11434",
-        "model": "qwen3:4b",
+        "model": "qwen3:4b-instruct",
         "keep_alive": "10m",
         "context_window": 4096,
         "max_output_tokens": 128,
@@ -60,7 +60,7 @@ class OllamaChatAdapterTests(unittest.TestCase):
             "_request_json",
             side_effect=[{"version": "test"}, {"models": [{"name": "another:4b"}]}],
         ):
-            with self.assertRaisesRegex(OllamaModelUnavailableError, "ollama pull qwen3:4b"):
+            with self.assertRaisesRegex(OllamaModelUnavailableError, "ollama pull qwen3:4b-instruct"):
                 adapter.ensure_available()
 
     def test_thinking_only_artifact_is_rejected_for_normal_chat(self):
@@ -76,7 +76,7 @@ class OllamaChatAdapterTests(unittest.TestCase):
             "_request_json",
             side_effect=[
                 {"version": "test"},
-                {"models": [{"name": "qwen3:4b"}]},
+                {"models": [{"name": "qwen3:4b-instruct"}]},
                 profile,
             ],
         ):

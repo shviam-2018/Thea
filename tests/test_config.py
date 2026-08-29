@@ -9,7 +9,7 @@ from solace.config import SolaceConfig, load_config
 class ConfigTests(unittest.TestCase):
     def test_cpu_friendly_defaults(self):
         config = SolaceConfig()
-        self.assertEqual(config.chat_model, "qwen3:4b")
+        self.assertEqual(config.chat_model, "qwen3:4b-instruct")
         self.assertEqual(config.embedding_model, "nomic-embed-text:latest")
         self.assertEqual(config.embedding_dimensions, 768)
         self.assertLessEqual(config.short_term_message_limit, 24)

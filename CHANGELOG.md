@@ -9,7 +9,7 @@ First Solace v2 prerelease foundation.
 - Target Python 3.12 for development and package installation.
 - Add configuration-driven CPU-friendly model defaults.
 - Add local `/status` reporting for system, AI, memory, and storage state.
-- Add interface-independent local chat through `qwen3:4b` and Ollama.
+- Add interface-independent local chat through `qwen3:4b-instruct` and Ollama.
 - Add bounded short-term context and append-only JSONL conversation history.
 - Add `/help`, `/status`, `/new`, `/history`, and `/quit` interactive commands.
 - Add streamed local responses through the interface-independent companion API.
