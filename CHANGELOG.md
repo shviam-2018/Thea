@@ -12,7 +12,12 @@ First Solace v2 prerelease foundation.
 - Add interface-independent local chat through `qwen3:4b` and Ollama.
 - Add bounded short-term context and append-only JSONL conversation history.
 - Add `/help`, `/status`, `/new`, `/history`, and `/quit` interactive commands.
-- Keep Qwen reasoning in Ollama's structured thinking field and persist only final replies.
+- Add streamed local responses through the interface-independent companion API.
+- Send `think: false` for normal chat and reject thinking-only artifacts instead of exposing reasoning.
+- Add cold/warm `/benchmark` timing, token throughput, RAM, and processor reporting.
+- Tune the laptop profile to a 4096 context, 128 response tokens, 10-minute keep-alive, and documented Qwen non-thinking sampling.
+- Preload once per active session and explicitly unload on normal exit.
+- Extend `/status` with thinking, streaming, context, response limit, keep-alive, and model-load state.
 - Preserve the historical `v0.1.0` version line by starting Solace v2 at `0.2.0-alpha.1`.
 
 ## 0.1.0
