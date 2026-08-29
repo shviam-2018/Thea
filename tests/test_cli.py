@@ -16,6 +16,8 @@ class FakeCompanion:
         self.message_count = 0
         self.responses: list[str] = []
         self.new_calls = 0
+        self.preload_calls = 0
+        self.close_calls = 0
 
     def ensure_available(self):
         if self.ready_error is not None:
@@ -25,6 +27,18 @@ class FakeCompanion:
         self.responses.append(text)
         self.message_count += 2
         return "local reply"
+
+    def respond_stream(self, text):
+        self.responses.append(text)
+        self.message_count += 2
+        yield "local "
+        yield "reply"
+
+    def preload(self):
+        self.preload_calls += 1
+
+    def close(self):
+        self.close_calls += 1
 
     def new_conversation(self):
         self.new_calls += 1
@@ -84,6 +98,21 @@ class CliTests(unittest.TestCase):
         self.assertEqual(companion.responses, ["hey"])
         self.assertIn("Solace > local reply", output)
         self.assertEqual(output[-1], "Solace > Take care.")
+        self.assertEqual(companion.preload_calls, 1)
+        self.assertEqual(companion.close_calls, 1)
+
+    def test_chat_writes_stream_fragments_immediately(self):
+        output = []
+        streamed = []
+        result = run_chat(
+            SolaceConfig(),
+            companion=FakeCompanion(),
+            input_fn=sequence_input("hey", "/quit"),
+            output_fn=output.append,
+            stream_output_fn=streamed.append,
+        )
+        self.assertEqual(result, 0)
+        self.assertEqual(streamed, ["Solace > ", "local ", "reply", "\n"])
 
     def test_new_starts_a_fresh_session(self):
         output = []
@@ -125,6 +154,20 @@ class CliTests(unittest.TestCase):
         self.assertEqual(companion.conversation_id, "conversation-one")
         self.assertEqual(companion.responses, ["still here"])
         self.assertIn("local status", output)
+
+    def test_benchmark_command_is_compact_and_keeps_session(self):
+        output = []
+        companion = FakeCompanion()
+        result = run_chat(
+            SolaceConfig(),
+            companion=companion,
+            input_fn=sequence_input("/benchmark", "/quit"),
+            output_fn=output.append,
+            benchmark_provider=lambda _config: "small benchmark",
+        )
+        self.assertEqual(result, 0)
+        self.assertIn("small benchmark", output)
+        self.assertEqual(companion.conversation_id, "conversation-one")
 
     def test_eof_and_keyboard_interrupt_exit_cleanly(self):
         for error_type in (EOFError, KeyboardInterrupt):

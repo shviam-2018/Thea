@@ -4,7 +4,8 @@ import unittest
 from pathlib import Path
 
 from solace.companion import Companion
-from solace.llm import ChatMessage
+from solace.llm import ChatMessage, ChatStreamEvent
+from solace.ollama import OllamaResponseError
 from solace.storage import ConversationStore
 
 
@@ -12,13 +13,24 @@ class FakeChatAdapter:
     def __init__(self):
         self.available_checks = 0
         self.calls: list[tuple[ChatMessage, ...]] = []
+        self.preload_calls = 0
+        self.unload_calls = 0
 
     def ensure_available(self):
         self.available_checks += 1
 
-    def chat(self, messages):
+    def chat_stream(self, messages):
         self.calls.append(tuple(messages))
-        return f"reply {len(self.calls)}"
+        yield ChatStreamEvent(f"reply {len(self.calls)}")
+
+    def chat(self, messages):
+        return "".join(event.content for event in self.chat_stream(messages))
+
+    def preload(self):
+        self.preload_calls += 1
+
+    def unload(self):
+        self.unload_calls += 1
 
 
 class CompanionTests(unittest.TestCase):
@@ -48,6 +60,31 @@ class CompanionTests(unittest.TestCase):
         records = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
         self.assertEqual([record["role"] for record in records], ["user", "assistant"])
         self.assertEqual([record["content"] for record in records], ["hello", "reply 1"])
+
+    def test_streaming_persists_only_the_completed_visible_reply(self):
+        self.model.chat_stream = lambda messages: iter(
+            (ChatStreamEvent("visible "), ChatStreamEvent("reply"))
+        )
+        fragments = list(self.companion.respond_stream("hello"))
+        self.assertEqual(fragments, ["visible ", "reply"])
+
+        path = self.store.conversation_path("conversation-one")
+        records = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
+        self.assertEqual(records[-1]["content"], "visible reply")
+        self.assertNotIn("reasoning", records[-1]["content"])
+
+    def test_incomplete_stream_does_not_persist_partial_assistant_text(self):
+        def failed_stream(_messages):
+            yield ChatStreamEvent("partial")
+            raise OllamaResponseError("stream failed")
+
+        self.model.chat_stream = failed_stream
+        with self.assertRaises(OllamaResponseError):
+            list(self.companion.respond_stream("hello"))
+
+        path = self.store.conversation_path("conversation-one")
+        records = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
+        self.assertEqual([record["role"] for record in records], ["user"])
 
     def test_model_context_is_bounded_but_complete_history_is_persisted(self):
         for index in range(20):

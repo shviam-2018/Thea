@@ -14,7 +14,14 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(config.embedding_dimensions, 768)
         self.assertLessEqual(config.short_term_message_limit, 24)
         self.assertEqual(config.ollama_context_window, 4096)
-        self.assertEqual(config.ollama_max_output_tokens, 256)
+        self.assertEqual(config.ollama_max_output_tokens, 128)
+        self.assertEqual(config.ollama_keep_alive, "10m")
+        self.assertIs(config.ollama_thinking, False)
+        self.assertIs(config.ollama_streaming, True)
+        self.assertEqual(config.ollama_temperature, 0.7)
+        self.assertEqual(config.ollama_top_p, 0.8)
+        self.assertEqual(config.ollama_top_k, 20)
+        self.assertEqual(config.ollama_min_p, 0.0)
         self.assertEqual(config.ollama_request_timeout_seconds, 180.0)
 
     def test_loads_override(self):

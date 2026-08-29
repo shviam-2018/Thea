@@ -43,9 +43,17 @@ class SolaceConfig:
     qdrant_url: str = "http://127.0.0.1:6333"
     memory_collection: str = "solace_memories"
     short_term_message_limit: int = 24
-    ollama_keep_alive: str = "2m"
+    ollama_keep_alive: str = "10m"
     ollama_context_window: int = 4096
-    ollama_max_output_tokens: int = 256
+    ollama_max_output_tokens: int = 128
+    ollama_thinking: bool = False
+    ollama_streaming: bool = True
+    ollama_temperature: float = 0.7
+    ollama_top_p: float = 0.8
+    ollama_top_k: int = 20
+    ollama_min_p: float = 0.0
+    ollama_preload_on_start: bool = True
+    ollama_unload_on_exit: bool = True
     ollama_request_timeout_seconds: float = 180.0
     data_dir: Path | None = None
 
@@ -95,6 +103,25 @@ def _validated(raw: Mapping[str, Any]) -> SolaceConfig:
         raise ValueError("ollama_context_window must be a positive integer")
     if type(config.ollama_max_output_tokens) is not int or config.ollama_max_output_tokens <= 0:
         raise ValueError("ollama_max_output_tokens must be a positive integer")
+    if type(config.ollama_top_k) is not int or config.ollama_top_k <= 0:
+        raise ValueError("ollama_top_k must be a positive integer")
+    boolean_fields = (
+        config.ollama_thinking,
+        config.ollama_streaming,
+        config.ollama_preload_on_start,
+        config.ollama_unload_on_exit,
+    )
+    if any(type(value) is not bool for value in boolean_fields):
+        raise ValueError("thinking, streaming, preload, and unload settings must be booleans")
+    for name, value, minimum, maximum in (
+        ("ollama_temperature", config.ollama_temperature, 0.0, 2.0),
+        ("ollama_top_p", config.ollama_top_p, 0.0, 1.0),
+        ("ollama_min_p", config.ollama_min_p, 0.0, 1.0),
+    ):
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise ValueError(f"{name} must be a number")
+        if not minimum <= value <= maximum:
+            raise ValueError(f"{name} must be between {minimum:g} and {maximum:g}")
     if (
         isinstance(config.ollama_request_timeout_seconds, bool)
         or not isinstance(config.ollama_request_timeout_seconds, (int, float))

@@ -6,9 +6,10 @@ import argparse
 import sys
 
 from . import display_version
-from .cli import run_chat
+from .cli import benchmark_text, run_chat
 from .commands import handle_slash_command
 from .config import load_config
+from .ollama import OllamaError
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -38,6 +39,13 @@ def main(argv: list[str] | None = None) -> int:
             print(f"Unable to start Solace: {exc}", file=sys.stderr)
             return 2
     command = args.command if args.command.startswith("/") else f"/{args.command}"
+    if command.lower() == "/benchmark":
+        try:
+            print(benchmark_text(config))
+        except OllamaError as exc:
+            print(f"Benchmark error: {exc}", file=sys.stderr)
+            return 1
+        return 0
     output = handle_slash_command(command, config)
     if output is None:
         return 1

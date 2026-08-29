@@ -44,6 +44,12 @@ class StatusSnapshot:
     embedding_model: str
     embedding_dimensions: str
     ollama_state: str
+    thinking_state: str
+    streaming_state: str
+    context_window: int
+    response_limit: int
+    keep_alive: str
+    chat_model_state: str
     mem0_state: str
     long_term_memories: int | None
     qdrant_storage_bytes: int | None
@@ -262,6 +268,34 @@ def embedding_dimensions_state(config: SolaceConfig, ollama_running: bool) -> st
     return f"{configured} (verified)"
 
 
+def running_model_state(config: SolaceConfig, ollama_running: bool) -> str:
+    if not ollama_running:
+        return "unknown (Ollama unavailable)"
+    payload = _get_json(f"{config.ollama_base_url.rstrip('/')}/api/ps")
+    models = payload.get("models") if isinstance(payload, dict) else None
+    if not isinstance(models, list):
+        return "not loaded"
+    for item in models:
+        if not isinstance(item, dict):
+            continue
+        name = item.get("name") or item.get("model")
+        if name != config.chat_model:
+            continue
+        size = item.get("size")
+        size_vram = item.get("size_vram")
+        processor = "processor unknown"
+        if type(size) is int and size > 0 and type(size_vram) is int:
+            gpu_percent = round((size_vram / size) * 100)
+            if gpu_percent <= 0:
+                processor = "100% CPU"
+            elif gpu_percent >= 100:
+                processor = "100% GPU"
+            else:
+                processor = f"{100 - gpu_percent}% CPU / {gpu_percent}% GPU"
+        return f"loaded ({processor}, {format_bytes(size if type(size) is int else None)})"
+    return "not loaded"
+
+
 def _package_available(distribution_module: str) -> bool:
     try:
         return importlib.util.find_spec(distribution_module) is not None
@@ -317,6 +351,12 @@ def collect_status(config: SolaceConfig) -> StatusSnapshot:
         embedding_model=config.embedding_model,
         embedding_dimensions=embedding_dimensions_state(config, ollama_running),
         ollama_state=ollama,
+        thinking_state="enabled" if config.ollama_thinking else "disabled",
+        streaming_state="enabled" if config.ollama_streaming else "disabled",
+        context_window=config.ollama_context_window,
+        response_limit=config.ollama_max_output_tokens,
+        keep_alive=config.ollama_keep_alive,
+        chat_model_state=running_model_state(config, ollama_running),
         mem0_state=mem0,
         long_term_memories=_long_term_memory_count(qdrant_info),
         qdrant_storage_bytes=qdrant_bytes,
@@ -360,6 +400,12 @@ def format_status(snapshot: StatusSnapshot) -> str:
             f"Embedding model: {snapshot.embedding_model}",
             f"Embedding dimensions: {snapshot.embedding_dimensions}",
             f"Ollama: {snapshot.ollama_state}",
+            f"Thinking: {snapshot.thinking_state}",
+            f"Streaming: {snapshot.streaming_state}",
+            f"Context: {snapshot.context_window}",
+            f"Response limit: {snapshot.response_limit} tokens",
+            f"Keep alive: {snapshot.keep_alive}",
+            f"Model state: {snapshot.chat_model_state}",
             "",
             "Memory",
             f"Mem0: {snapshot.mem0_state}",

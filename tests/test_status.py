@@ -13,6 +13,7 @@ from solace.status import (
     embedding_dimensions_state,
     format_bytes,
     format_status,
+    running_model_state,
 )
 
 
@@ -40,6 +41,12 @@ class StatusTests(unittest.TestCase):
             embedding_model="nomic-embed-text:latest",
             embedding_dimensions="768 (verified)",
             ollama_state="running",
+            thinking_state="disabled",
+            streaming_state="enabled",
+            context_window=4096,
+            response_limit=128,
+            keep_alive="10m",
+            chat_model_state="loaded (100% CPU, 3.0 GiB)",
             mem0_state="ready",
             long_term_memories=12,
             qdrant_storage_bytes=1024,
@@ -53,6 +60,12 @@ class StatusTests(unittest.TestCase):
             "Chat model: qwen3:4b",
             "Embedding model: nomic-embed-text:latest",
             "Embedding dimensions: 768 (verified)",
+            "Thinking: disabled",
+            "Streaming: enabled",
+            "Context: 4096",
+            "Response limit: 128 tokens",
+            "Keep alive: 10m",
+            "Model state: loaded (100% CPU, 3.0 GiB)",
             "Long-term memories: 12",
             "Conversations: 2.0 KiB",
         ):
@@ -86,6 +99,20 @@ class StatusTests(unittest.TestCase):
         }
         state = embedding_dimensions_state(SolaceConfig(), ollama_running=True)
         self.assertIn("mismatch", state)
+
+    @patch("solace.status._get_json")
+    def test_running_model_state_reports_cpu_allocation(self, get_json):
+        get_json.return_value = {
+            "models": [
+                {
+                    "name": "qwen3:4b",
+                    "size": 3 * 1024**3,
+                    "size_vram": 0,
+                }
+            ]
+        }
+        state = running_model_state(SolaceConfig(), ollama_running=True)
+        self.assertEqual(state, "loaded (100% CPU, 3.0 GiB)")
 
 
 if __name__ == "__main__":

@@ -13,6 +13,7 @@ HELP_TEXT = """Commands
   /status   Show local system and service status
   /new      Start a new conversation
   /history  Show compact recent conversation information
+  /benchmark Run a small cold/warm local inference benchmark
   /quit     Exit Solace"""
 
 
