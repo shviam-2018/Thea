@@ -1,0 +1,10 @@
+{
+  "chat_model": "qwen3:4b",
+  "embedding_model": "nomic-embed-text:latest",
+  "embedding_dimensions": 768,
+  "ollama_base_url": "http://127.0.0.1:11434",
+  "qdrant_url": "http://127.0.0.1:6333",
+  "memory_collection": "solace_memories",
+  "short_term_message_limit": 24,
+  "ollama_keep_alive": "2m"
+}

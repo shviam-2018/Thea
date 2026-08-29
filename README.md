@@ -1,65 +1,82 @@
-# Thea: AI Therapist in Python
+# Solace v2
 
-Welcome to Thea, your virtual companion on the path to emotional well-being! Thea is an artificial intelligence therapist implemented in Python, designed to simulate the empathetic and understanding qualities of a real-life therapist. With a focus on continuous learning and personalized interactions, Thea aims to create a supportive environment for users seeking emotional guidance.
+Solace is a private, local-first AI wellbeing companion. Version 2 is being rebuilt for modest laptop hardware and CPU-friendly inference; it does not require CUDA, an NVIDIA GPU, or an Internet service for resource reporting.
 
-# compatability
-Windows only due to an overlook while making the project using **pyttsx3** which relies on **pywin32** which is only available on Windows as the name suggests. 
-The Thea development team is working hard to improve. And to use a more os friendly package, this update can be expected 3 updates from 0.1.0
+This branch currently contains the first v2 foundation: configuration and a local `/status` command. The legacy Thea prototype remains in `code/` as reference and is not the v2 runtime.
 
-# Disclaimer
-Before proceeding, it is crucial to note that Thea is an AI therapist designed to provide support and companionship. However, **it is not a substitute for professional mental health care. If you are experiencing severe distress or have suicidal thoughts, please seek immediate help from a mental health professional or contact a helpline in your region.**
+The current Solace v2 prerelease is `0.2.0-alpha.1`. Python package tooling exposes the normalized PEP 440 version `0.2.0a1` from the same authoritative version value.
 
-The **Thea development team emphasizes** that while Thea aims to be supportive, **it is not a licensed therapist.** The AI is continually learning and evolving, and your feedback is valuable for its improvement. **The Thea team does not take responsibility for any harm caused by the program; use it at your own risk.**
+## Baseline hardware and models
 
-## Features
+The initial development target is a Ryzen 5 7530U laptop with 16 GB RAM and integrated Radeon graphics. The supported baseline is deliberately small:
 
-- **Dynamic Learning:** Thea evolves over time, learning from user interactions to enhance the quality of responses.
-  
-- **Natural Language Processing:** Leveraging advanced NLP techniques, Thea engages in natural and meaningful conversations with users.
+- Chat: `qwen3:4b`
+- Embeddings: `nomic-embed-text:latest` (768 dimensions)
+- One chat model and one embedding model installed during normal development
+- A bounded 24-message short-term context, with selective Mem0 retrieval planned for long-term memory
 
-- **Empathetic Interaction:** Thea's goal is to provide a human-like therapeutic experience, offering support and understanding.
+An 8B-class chat model may be configured on stronger hardware, but is not the default. Solace will not download models automatically. Before adding one, check its Ollama package size and available disk space. Models in the 14B, 30B, or 70B classes are outside this laptop's target profile.
 
-## Getting Started
+The baseline models and limits are configuration-driven in [`config/solace.example.json`](config/solace.example.json). If the embedding model changes, its vector dimensions must also be verified and changed before creating or reusing a Qdrant collection.
 
-To get started with Thea, follow these simple steps:
+## Run the current foundation
 
-1. **Clone the Repository:**
-   ```bash
-   git clone https://github.com/shviam-2018/Thea.git
-   ```
+Solace targets Python 3.12. A globally installed Python 3.14 interpreter is not the project runtime and is not required. Create and activate the Windows development environment from the repository root:
 
-2. **Navigate to the Project Directory:**
-   ```bash
-   cd Thea
-   ```
+```powershell
+py -3.12 -m venv .venv
+.venv\Scripts\activate
+python -m pip install --upgrade pip
+python -m pip install -e .
+```
 
-3. **Install Dependencies:**
-   ```bash
-   bash install.sh
-   ```
-   or
-   ```bash
-   pip3 install speechrecognition==3.10.0 pyttsx3==2.90 
-   ```
+Then run the test suite and status command inside the activated environment:
 
-4. **Run Thea:**
-   ```bash
-   cd code
-   python main.py
-   ```
+```powershell
+python -m unittest discover -s tests -v
+python -m solace /status
+solace --version
+```
 
-## Contributing
+The command also accepts `status` for shell convenience:
 
-We welcome contributions to enhance Thea's capabilities and improve user experiences. If you're interested in contributing, please check out our [Contribution Guidelines](CONTRIBUTING.md).
+```powershell
+python -m solace status
+```
 
-## Feedback and Support
+No Python runtime dependencies are needed for `/status`. It uses standard operating-system APIs, queries the configured Ollama/Qdrant endpoints, and remains useful when those services are unavailable. When Ollama is running and the embedding model is installed, the command checks its reported native vector length against `embedding_dimensions` without loading the model for inference.
 
-If you have feedback, encounter issues, or need support, please [open an issue](https://github.com/shviam-2018/Thea/issues). We appreciate your input and are committed to making Thea a valuable tool for users seeking emotional support.
+## Configuration
+
+Pass a JSON file directly:
+
+```powershell
+python -m solace /status --config config/solace.example.json
+```
+
+Alternatively, set `SOLACE_CONFIG` to the JSON file path. `SOLACE_DATA_DIR` can override the platform data directory without changing the file. Defaults are:
+
+- Windows: `%LOCALAPPDATA%\Solace`
+- macOS: `~/Library/Application Support/Solace`
+- Linux: `$XDG_DATA_HOME/solace` or `~/.local/share/solace`
+
+Conversation and local Qdrant data live below that one directory so storage reporting is bounded and data is not duplicated by the application. Ollama manages model files separately.
+
+## Resource policy
+
+The v2 implementation should preserve these constraints as it grows:
+
+- Inference must remain functional on CPU; GPU use is optional.
+- Do not keep models loaded longer than useful (`ollama_keep_alive` defaults to `2m`).
+- Do not compensate for memory design by using a huge context window.
+- Store long-term memories selectively and retrieve only relevant items.
+- Do not automatically pull a model or install multiple experimental LLMs.
+- Keep all resource reporting local and tolerate missing services.
+
+## Safety
+
+Solace is not a licensed therapist, medical device, crisis service, or substitute for professional care. A production release will require explicit safety and crisis-response behavior beyond this infrastructure layer.
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE), granting you the freedom to modify and distribute the code.
-
----
-
-Join us on the journey to redefine virtual therapy! Together, let's explore the intersection of technology and empathy, making Thea a beacon of support in the digital landscape.
+This project is licensed under the [MIT License](LICENSE).

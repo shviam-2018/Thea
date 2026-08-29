@@ -1,16 +1,18 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-# Check if Python and pip are installed
-if ! command -v python3 > /dev/null || ! command -v pip3 > /dev/null; then
-    echo "Error: Python and pip are required. Please install them before running this script."
+if ! command -v python3 >/dev/null; then
+    echo "Python 3.12 is required." >&2
     exit 1
 fi
 
-# Install specific Python packages (excluding pywin32 on non-Windows systems)
-if [[ $(uname) == "Linux" ]]; then
-    echo "Sorry, the Thea development team has not yet reached Linux. But we are working as hard as we can to make it available to all operating systems."
-else
-    pip3 install speechrecognition==3.10.0 pyttsx3==2.90 pywin32==306
+if ! python3 -c 'import sys; raise SystemExit(sys.version_info[:2] != (3, 12))'; then
+    echo "Solace targets Python 3.12; create the environment with Python 3.12." >&2
+    exit 1
 fi
 
-echo "Installation completed successfully."
+# Installs only the Solace Python package. Ollama models are always user-selected
+# and must be pulled explicitly so setup never consumes several GB unexpectedly.
+python3 -m pip install -e .
+
+echo "Solace installed. Run: solace /status"

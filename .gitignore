@@ -1,1 +1,9 @@
 code/_pycache/
+.specstory/
+.vscode/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
