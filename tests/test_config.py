@@ -13,6 +13,9 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(config.embedding_model, "nomic-embed-text:latest")
         self.assertEqual(config.embedding_dimensions, 768)
         self.assertLessEqual(config.short_term_message_limit, 24)
+        self.assertEqual(config.ollama_context_window, 4096)
+        self.assertEqual(config.ollama_max_output_tokens, 256)
+        self.assertEqual(config.ollama_request_timeout_seconds, 180.0)
 
     def test_loads_override(self):
         with tempfile.TemporaryDirectory() as directory:

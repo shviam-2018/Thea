@@ -6,5 +6,8 @@
   "qdrant_url": "http://127.0.0.1:6333",
   "memory_collection": "solace_memories",
   "short_term_message_limit": 24,
-  "ollama_keep_alive": "2m"
+  "ollama_keep_alive": "2m",
+  "ollama_context_window": 4096,
+  "ollama_max_output_tokens": 256,
+  "ollama_request_timeout_seconds": 180
 }

@@ -44,6 +44,9 @@ class SolaceConfig:
     memory_collection: str = "solace_memories"
     short_term_message_limit: int = 24
     ollama_keep_alive: str = "2m"
+    ollama_context_window: int = 4096
+    ollama_max_output_tokens: int = 256
+    ollama_request_timeout_seconds: float = 180.0
     data_dir: Path | None = None
 
     @property
@@ -88,6 +91,16 @@ def _validated(raw: Mapping[str, Any]) -> SolaceConfig:
         raise ValueError("embedding_dimensions must be a positive integer")
     if type(config.short_term_message_limit) is not int or config.short_term_message_limit <= 0:
         raise ValueError("short_term_message_limit must be a positive integer")
+    if type(config.ollama_context_window) is not int or config.ollama_context_window <= 0:
+        raise ValueError("ollama_context_window must be a positive integer")
+    if type(config.ollama_max_output_tokens) is not int or config.ollama_max_output_tokens <= 0:
+        raise ValueError("ollama_max_output_tokens must be a positive integer")
+    if (
+        isinstance(config.ollama_request_timeout_seconds, bool)
+        or not isinstance(config.ollama_request_timeout_seconds, (int, float))
+        or config.ollama_request_timeout_seconds <= 0
+    ):
+        raise ValueError("ollama_request_timeout_seconds must be a positive number")
     if not config.ollama_base_url.startswith(("http://", "https://")):
         raise ValueError("ollama_base_url must be an HTTP(S) URL")
     if not config.qdrant_url.startswith(("http://", "https://")):

@@ -6,6 +6,7 @@ import argparse
 import sys
 
 from . import display_version
+from .cli import run_chat
 from .commands import handle_slash_command
 from .config import load_config
 
@@ -15,8 +16,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "command",
         nargs="?",
-        default="/status",
-        help="slash command (default: /status)",
+        default=None,
+        help="optional command such as /status; omit to start chat",
     )
     parser.add_argument("--config", help="path to a Solace JSON configuration file")
     parser.add_argument("--version", action="version", version=f"Solace {display_version()}")
@@ -27,11 +28,17 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     try:
         config = load_config(args.config)
-        command = args.command if args.command.startswith("/") else f"/{args.command}"
-        output = handle_slash_command(command, config)
     except (OSError, TypeError, ValueError) as exc:
         print(f"Configuration error: {exc}", file=sys.stderr)
         return 2
+    if args.command is None:
+        try:
+            return run_chat(config)
+        except (OSError, TypeError, ValueError) as exc:
+            print(f"Unable to start Solace: {exc}", file=sys.stderr)
+            return 2
+    command = args.command if args.command.startswith("/") else f"/{args.command}"
+    output = handle_slash_command(command, config)
     if output is None:
         return 1
     print(output)

@@ -28,7 +28,11 @@ class ConversationStoreTests(unittest.TestCase):
         self.store.append(conversation_id, "user", "hello")
         self.store.append(conversation_id, "assistant", "Hey :) What's up?")
 
-        lines = self.store.conversation_path(conversation_id).read_text(encoding="utf-8").splitlines()
+        lines = (
+            self.store.conversation_path(conversation_id)
+            .read_text(encoding="utf-8")
+            .splitlines()
+        )
         self.assertEqual(
             [json.loads(line) for line in lines],
             [
