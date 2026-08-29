@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 import sys
 
-from . import __version__
+from . import display_version
 from .commands import handle_slash_command
 from .config import load_config
 
@@ -19,7 +19,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="slash command (default: /status)",
     )
     parser.add_argument("--config", help="path to a Solace JSON configuration file")
-    parser.add_argument("--version", action="version", version=f"Solace {__version__}")
+    parser.add_argument("--version", action="version", version=f"Solace {display_version()}")
     return parser
 
 

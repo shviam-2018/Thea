@@ -19,4 +19,4 @@ solace = "solace.__main__:main"
 include = ["solace*"]
 
 [tool.setuptools.dynamic]
-version = {attr = "solace.__version__"}
+version = {attr = "solace._version.__version__"}

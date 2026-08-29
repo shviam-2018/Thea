@@ -15,7 +15,7 @@ from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-from . import __version__
+from . import display_version
 from .config import SolaceConfig
 
 
@@ -309,7 +309,7 @@ def collect_status(config: SolaceConfig) -> StatusSnapshot:
     qdrant_path = config.qdrant_storage_dir
     qdrant_bytes = directory_size(qdrant_path) if qdrant_path.exists() else None
     return StatusSnapshot(
-        version=__version__,
+        version=display_version(),
         cpu=cpu_name(),
         memory=memory_usage(),
         disk=disk_usage(data_dir),
